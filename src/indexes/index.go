@@ -1,0 +1,117 @@
+package indexes
+
+import (
+	"os"
+	"strings"
+	"encoding/gob"
+	. "utils"
+	. "files"
+)
+
+/* Index type */
+type Index struct {
+	Informations map[string]Information
+	logger Logger
+}
+
+func NewIndex(log Logger) *Index {
+	return &Index{Informations: make(map[string]Information), logger: log}
+}
+
+func (index *Index) Add(phrase string, source string) {
+	_, ok := index.Informations[phrase]
+
+	if ok {
+		current := index.Informations[phrase]
+
+		if current.Phrase == phrase {
+			current.Increase()
+			current.AddSource(source)
+		}
+
+		index.Informations[phrase] = current
+	} else {
+		info := NewInformation()
+		info.Phrase = phrase
+		info.Occurrencies = 1
+		info.AddSource(source)
+
+		index.Informations[phrase] = *info
+	}
+
+	/*
+	for k := range index.Informations  {
+		current := index.Informations[k]
+
+		if current.Phrase == source {
+			current.Increase()
+			current.AddSource(source)
+		}
+	}*/
+}
+
+func (index *Index) Serialize(fileName string) {
+
+	index.logger.Debug.Println("Serializing index")
+	// Create a file for IO
+	encodeFile, err := os.Create(fileName)
+	if err != nil {
+		panic(err)
+	}
+
+	// Since this is a binary format large parts of it will be unreadable
+	encoder := gob.NewEncoder(encodeFile)
+
+	// Write to the file
+	if err := encoder.Encode(index.Informations); err != nil {
+		panic(err)
+	}
+	encodeFile.Close()
+}
+
+
+func (index *Index) Deserialize(fileName string) {
+
+	index.logger.Debug.Println("Deserializing index")
+	// Open a RO file
+	decodeFile, err := os.Open(fileName)
+	if err != nil {
+		panic(err)
+	}
+	defer decodeFile.Close()
+
+	// Create a decoder
+	decoder := gob.NewDecoder(decodeFile)
+
+	// Place to decode into
+	//index.Informations :=  make(map[string]Information)
+
+	// Decode -- We need to pass a pointer otherwise accounts2 isn't modified
+	decoder.Decode(&index.Informations)
+}
+
+//= map[string]string
+
+func (index *Index) Scan(file File) {
+	index.logger.Debug.Println(">> Scan start")
+
+	scanner := file.NewScanner()
+
+	count := 0
+	for scanner.Scan() {
+		count ++;
+		ucl := strings.ToUpper(scanner.Text())
+		//fmt.Println(ucl)
+
+		index.Add(ucl, file.Name)
+		index.logger.Debug.Println(">> Adding word ", ucl)
+	}
+
+	index.logger.Debug.Println(">> Word Count: ", count)
+
+	if err := scanner.Err(); err != nil {
+		index.logger.Error.Println(">> Error in scamn ", err)
+		os.Exit(1)
+	}
+	index.logger.Debug.Println(">> Scan completed")
+}
