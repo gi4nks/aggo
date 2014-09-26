@@ -115,3 +115,17 @@ func (index *Index) Scan(file File) {
 	}
 	index.logger.Debug.Println(">> Scan completed")
 }
+
+func (index *Index) Search(phrase string) []string {
+
+	searched, ok := index.Informations[phrase]
+
+	if ok {
+		index.logger.Info.Println(">> found in index")
+		return searched.SourceAsArray()
+	} else {
+		index.logger.Info.Println(">> no found in index")
+		return nil
+	}
+
+}

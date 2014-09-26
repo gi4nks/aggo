@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+//	"io/ioutil"
 	. "utils"
 	. "indexes"
 	. "files"
@@ -99,8 +99,12 @@ func main() {
 	fmt.Println("----------------------------------")
 	*/
 
+	/*
 	files, _ := ioutil.ReadDir("E:/Work/Post/Activities")
 	for _, f := range files {
 		fmt.Println(f.Name())
 	}
+	*/
+	var k = indexFile.Search("OUT");
+	fmt.Println("keys found into the following files: ", k)
 }

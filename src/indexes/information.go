@@ -21,3 +21,12 @@ func (information *Information) AddSource(source string) {
 		information.Sources[source] =  struct{}{}
 	}
 }
+
+func (information *Information) SourceAsArray() []string {
+	keys := make([]string, 0, len(information.Sources))
+	for k := range information.Sources {
+		keys = append(keys, k)
+	}
+
+	return keys
+}
