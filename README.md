@@ -11,6 +11,7 @@ Things done (but still to improve):
 - create File structure
 - create a Logger structure
 - create Scan of files word by word
+- implemented simple search model
 
 Things to do:
 - manage stop words and so on to purge archive and have a better index class
