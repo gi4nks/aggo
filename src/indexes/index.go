@@ -6,6 +6,7 @@ import (
 	"encoding/gob"
 	. "utils"
 	. "files"
+	. "phonetics"
 )
 
 /* Index type */
@@ -102,9 +103,17 @@ func (index *Index) Scan(file File) {
 		count ++;
 		ucl := strings.ToUpper(scanner.Text())
 		//fmt.Println(ucl)
+		index.logger.Debug.Println(">> read word ", ucl)
 
-		index.Add(ucl, file.Name)
-		index.logger.Debug.Println(">> Adding word ", ucl)
+		meta := EncodeMetaphone(ucl)
+		index.logger.Debug.Println(">> encoded word ", meta)
+
+		if meta != "" {
+			index.Add(meta, file.Name)
+			index.logger.Debug.Println(">> Adding word ", meta)
+		} else {
+			index.logger.Warning.Println(">> Word not added due to null coded result from ", ucl)
+		}
 	}
 
 	index.logger.Debug.Println(">> Word Count: ", count)
@@ -118,14 +127,26 @@ func (index *Index) Scan(file File) {
 
 func (index *Index) Search(phrase string) []string {
 
-	searched, ok := index.Informations[phrase]
+	meta := EncodeMetaphone(phrase)
 
-	if ok {
-		index.logger.Info.Println(">> found in index")
-		return searched.SourceAsArray()
+	if meta != "" {
+		index.logger.Debug.Println(">> Encoded value ", meta)
+		index.logger.Debug.Println(">> Informtion content ", index.Informations)
+
+
+		searched, ok := index.Informations[meta]
+
+		if ok {
+			index.logger.Info.Println(">> found in index")
+			return searched.SourceAsArray()
+		} else {
+			index.logger.Info.Println(">> no found in index")
+			return nil
+		}
 	} else {
-		index.logger.Info.Println(">> no found in index")
+		index.logger.Warning.Println(">> Word not added due to null coded result from ", phrase)
 		return nil
 	}
+
 
 }
