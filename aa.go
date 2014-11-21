@@ -1,5 +1,7 @@
 package main
 
+/*
+
 import (
 	"bufio"
 	"flag"
@@ -43,3 +45,4 @@ func main() {
 		printLines(path)
 	}
 }
+*/

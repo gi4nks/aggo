@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	. "utils"
+	"github.com/gi4nks/aggo/utils"
 )
 
 const (
@@ -19,10 +19,10 @@ type File struct {
 	hasMoreLines bool
 	file *os.File
 	bufReader *bufio.Reader
-	logger Logger
+	logger utils.Logger
 }
 
-func NewFile(n string, log Logger) *File {
+func NewFile(n string, log utils.Logger) *File {
 	return &File{Name: n, isOpened: false, hasMoreLines: false, logger: log}
 }
 
@@ -30,7 +30,7 @@ func (file *File) Open()  {
 	file.isOpened = false
 
 	fin, err := os.Open(file.Name)
-	CheckAndShow(err, "The file %s does not exist!\n", file.Name)
+	utils.CheckAndShow(err, "The file %s does not exist!\n", file.Name)
 
 	file.file = fin
 	file.isOpened = true
@@ -87,8 +87,3 @@ func (file *File) NewScanner() *bufio.Scanner {
 
 	return scanner;
 }
-
-
-
-
-

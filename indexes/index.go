@@ -4,18 +4,18 @@ import (
 	"os"
 	"strings"
 	"encoding/gob"
-	. "utils"
-	. "files"
-	. "phonetics"
+	"github.com/gi4nks/aggo/utils"
+	"github.com/gi4nks/aggo/files"
+	"github.com/gi4nks/aggo/phonetics"
 )
 
 /* Index type */
 type Index struct {
 	Informations map[string]Information
-	logger Logger
+	logger utils.Logger
 }
 
-func NewIndex(log Logger) *Index {
+func NewIndex(log utils.Logger) *Index {
 	return &Index{Informations: make(map[string]Information), logger: log}
 }
 
@@ -93,7 +93,7 @@ func (index *Index) Deserialize(fileName string) {
 
 //= map[string]string
 
-func (index *Index) Scan(file File) {
+func (index *Index) Scan(file files.File) {
 	index.logger.Debug.Println(">> Scan start")
 
 	scanner := file.NewScanner()
@@ -105,7 +105,7 @@ func (index *Index) Scan(file File) {
 		//fmt.Println(ucl)
 		index.logger.Debug.Println(">> read word ", ucl)
 
-		meta := EncodeMetaphone(ucl)
+		meta := phonetics.EncodeMetaphone(ucl)
 		index.logger.Debug.Println(">> encoded word ", meta)
 
 		if meta != "" {
@@ -127,7 +127,7 @@ func (index *Index) Scan(file File) {
 
 func (index *Index) Search(phrase string) []string {
 
-	meta := EncodeMetaphone(phrase)
+	meta := phonetics.EncodeMetaphone(phrase)
 
 	if meta != "" {
 		index.logger.Debug.Println(">> Encoded value ", meta)
