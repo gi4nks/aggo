@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 //	"io/ioutil"
-	. "utils"
-	. "indexes"
-	. "files"
+	"github.com/gi4nks/aggo/utils"
+	"github.com/gi4nks/aggo/indexes"
+	"github.com/gi4nks/aggo/files"
 )
 
 func main() {
@@ -13,7 +13,7 @@ func main() {
 
 	// Logging features
 	//Init(ioutil.Discard, os.Stdout, os.Stdout, os.Stderr)
-	var logger = NewLogger()
+	var logger = utils.NewLogger()
 	logger.InitDebug()
 
 	logger.Debug.Println("I have something standard to say")
@@ -32,15 +32,15 @@ func main() {
 	Write(outputFile, content)
 	*/
 
-	info3 := NewInformation()
+	info3 := indexes.NewInformation()
 	fmt.Println("Information info is: ", info3)
 
-	info1 := NewInformation()
+	info1 := indexes.NewInformation()
 	info1.Phrase = "prova"
 	info1.Occurrencies = 1;
 	fmt.Println("Information info is: ", info1)
 
-	info2 := NewInformation()
+	info2 := indexes.NewInformation()
 	info2.Phrase = "test"
 	info1.Occurrencies = 1;
 
@@ -62,7 +62,7 @@ func main() {
 
 
 	/* working with index structure */
-	index1 := NewIndex(*logger)
+	index1 := indexes.NewIndex(*logger)
 	index1.Add("prova", inputFile)
 	index1.Add("prova", outputFile)
 
@@ -75,14 +75,14 @@ func main() {
 	fmt.Println("index info is: ", index1)
 	/*
 	*/
-	indexFile := NewIndex(*logger)
+	indexFile := indexes.NewIndex(*logger)
 
-	file_1 := NewFile("/Users/gianluca/Projects/golang/aggo/resources/BDD.md", *logger)
+	file_1 := files.NewFile("/Users/gianluca/Projects/golang/aggo/resources/BDD.md", *logger)
 	file_1.Open()
 	indexFile.Scan(*file_1)
 	file_1.Close()
 
-	file_2 := NewFile("/Users/gianluca/Projects/golang/aggo/resources/GitHowTo.md", *logger)
+	file_2 := files.NewFile("/Users/gianluca/Projects/golang/aggo/resources/GitHowTo.md", *logger)
 	file_2.Open()
 	indexFile.Scan(*file_2)
 	file_2.Close()

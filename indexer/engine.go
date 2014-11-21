@@ -2,7 +2,7 @@ package indexer
 
 import (
 	//"fmt"
-	. "indexes"
+	"github.com/gi4nks/aggo/indexes"
 )
 
 type Engine struct {
