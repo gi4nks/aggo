@@ -24,8 +24,8 @@ func main() {
 
 
 
-	inputFile := "c:/tmp/Activities.md"
-	outputFile := "c:/tmp/output2.txt"
+	inputFile := "./resources/BDD.md"
+	outputFile := "./resources/output2.txt"
 
 	/*
 	content := Read(inputFile)
@@ -77,12 +77,12 @@ func main() {
 	*/
 	indexFile := indexes.NewIndex(*logger)
 
-	file_1 := files.NewFile("/Users/gianluca/Projects/golang/aggo/resources/BDD.md", *logger)
+	file_1 := files.NewFile("./resources/BDD.md", *logger)
 	file_1.Open()
 	indexFile.Scan(*file_1)
 	file_1.Close()
 
-	file_2 := files.NewFile("/Users/gianluca/Projects/golang/aggo/resources/GitHowTo.md", *logger)
+	file_2 := files.NewFile("./resources/GitHowTo.md", *logger)
 	file_2.Open()
 	indexFile.Scan(*file_2)
 	file_2.Close()
