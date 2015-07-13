@@ -22,8 +22,6 @@ func main() {
 	logger.Error.Println("Something has failed")
 
 
-
-
 	inputFile := "./resources/BDD.md"
 	outputFile := "./resources/output2.txt"
 
